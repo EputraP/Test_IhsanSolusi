@@ -51,17 +51,25 @@ func prepare() (handlers routes.Handlers) {
 	db := dbstore.Get()
 
 	testRepo := repository.NewTestRepository(db)
+	userRepo := repository.NewUserRepository(db)
 
 	testService := service.NewTestService(service.TestServiceConfig{
 		TestRepo: testRepo,
+	})
+	userService := service.NewUserService(service.UserServiceConfig{
+		UserRepo: userRepo,
 	})
 
 	testHandler := handler.NewTestHandler(handler.TestHandlerConfig{
 		TestService: testService,
 	})
+	userHandler := handler.NewUserHandler(handler.UserHandlerConfig{
+		UserService: userService,
+	})
 
 	handlers = routes.Handlers{
 		TestHandler: testHandler,
+		UserHandler: userHandler,
 	}
 	return
 }

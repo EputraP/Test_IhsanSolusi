@@ -7,9 +7,11 @@ import (
 
 type Handlers struct {
 	TestHandler *handler.TestHandler
+	UserHandler *handler.UserHandler
 }
 
 func Build(srv *fiber.App, h Handlers) {
-	test := srv.Group("/test")
-	test.Get("/hello", h.TestHandler.TestHandler)
+
+	srv.Post("/daftar", h.UserHandler.UserHandler)
+
 }
