@@ -3,8 +3,11 @@ module github.com/EputraP/Test_IhsanSolusi
 go 1.23.5
 
 require (
+	github.com/go-playground/validator/v10 v10.25.0
 	github.com/gofiber/fiber v1.14.6
 	github.com/lpernett/godotenv v0.0.0-20230527005122-0de1d4c5ef5e
+	gorm.io/driver/postgres v1.5.11
+	gorm.io/gorm v1.25.12
 )
 
 require (
@@ -12,7 +15,6 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.25.0 // indirect
 	github.com/gofiber/utils v0.0.10 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -33,6 +35,4 @@ require (
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	gorm.io/driver/postgres v1.5.11 // indirect
-	gorm.io/gorm v1.25.12 // indirect
 )
