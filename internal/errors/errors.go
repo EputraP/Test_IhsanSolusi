@@ -18,6 +18,7 @@ var (
 	ErrorNoRek12DigitsAndOnlyNumber            = errors.New("invalid no_rekening input: must be exactly 12 digits and contain only numbers")
 	ErrorNominalNumberWithoutThousandSeparator = errors.New("invalid nominal input: must contain only numbers without thousand separators (e.g., 1000, 25000)")
 	ErrorNominalMustValidNumericValue          = errors.New("invalid nominal input: must be a valid numeric value")
+	InsufficientBalance                        = errors.New("insufficient balance")
 
 	InvalidNoRek             = errors.New("invalid no rekening")
 	InvalidNameLength        = errors.New("name must be between 2 and 50 characters long")
