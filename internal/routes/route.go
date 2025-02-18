@@ -14,5 +14,5 @@ type Handlers struct {
 func Build(srv *fiber.App, h Handlers) {
 
 	srv.Post("/daftar", h.UserHandler.UserHandler)
-
+	srv.Post("/tabung", h.UserSaldoHandler.TabungHandler)
 }
