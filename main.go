@@ -58,7 +58,8 @@ func prepare() (handlers routes.Handlers) {
 		TestRepo: testRepo,
 	})
 	userService := service.NewUserService(service.UserServiceConfig{
-		UserRepo: userRepo,
+		UserRepo:      userRepo,
+		UserSaldoRepo: userSaldoRepo,
 	})
 	userSaldoService := service.NewUserSaldoService(service.UserSaldoServiceConfig{
 		UserSaldoRepo: userSaldoRepo,
