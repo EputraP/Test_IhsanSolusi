@@ -58,13 +58,9 @@ func prepare() (handlers routes.Handlers) {
 
 	db := dbstore.Get()
 
-	testRepo := repository.NewTestRepository(db)
 	userRepo := repository.NewUserRepository(db)
 	userSaldoRepo := repository.NewUserSaldoRepository(db)
 
-	testService := service.NewTestService(service.TestServiceConfig{
-		TestRepo: testRepo,
-	})
 	userService := service.NewUserService(service.UserServiceConfig{
 		UserRepo:      userRepo,
 		UserSaldoRepo: userSaldoRepo,
@@ -74,9 +70,6 @@ func prepare() (handlers routes.Handlers) {
 		UserRepo:      userRepo,
 	})
 
-	testHandler := handler.NewTestHandler(handler.TestHandlerConfig{
-		TestService: testService,
-	})
 	userHandler := handler.NewUserHandler(handler.UserHandlerConfig{
 		UserService: userService,
 	})
@@ -85,7 +78,6 @@ func prepare() (handlers routes.Handlers) {
 	})
 
 	handlers = routes.Handlers{
-		TestHandler:      testHandler,
 		UserHandler:      userHandler,
 		UserSaldoHandler: userSaldoHandler,
 	}
