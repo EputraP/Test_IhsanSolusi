@@ -11,18 +11,26 @@ import (
 	"github.com/EputraP/Test_IhsanSolusi/internal/routes"
 	"github.com/EputraP/Test_IhsanSolusi/internal/service"
 	dbstore "github.com/EputraP/Test_IhsanSolusi/internal/store/db"
+	"github.com/EputraP/Test_IhsanSolusi/internal/util/logger"
 	"github.com/gofiber/fiber"
 	"github.com/lpernett/godotenv"
 )
 
 func main() {
+
+	// Initialize the global logger
+	if err := logger.Init("app.log"); err != nil {
+		fmt.Println("Failed to initialize logger:", err)
+		return
+	}
+
 	env := os.Getenv(constant.EnvKeyEnv)
 
 	if env != "prod" {
 		err := godotenv.Load()
 
 		if err != nil {
-			log.Println("error loading env", err)
+			logger.Error("error loading env", "error", err)
 			log.Fatalln("error loading env", err)
 		}
 	}
@@ -40,10 +48,10 @@ func main() {
 	}
 
 	if err := srv.Listen(fmt.Sprintf(":%s", port)); err != nil {
-		log.Println("Error running gin server: ", err)
+		logger.Error("Error running gin server: ", "error", err)
 		log.Fatalln("Error running gin server: ", err)
 	}
-
+	logger.Info("Server running", "port", port)
 }
 
 func prepare() (handlers routes.Handlers) {
