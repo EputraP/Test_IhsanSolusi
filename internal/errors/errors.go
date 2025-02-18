@@ -10,6 +10,8 @@ var (
 	ErrorNoHPAlreadyUsed = errors.New("No Hp already used")
 	ErrorNIKAlreadyUsed  = errors.New("NIK already used")
 
+	ErrorCreatingUserSaldo = errors.New("Error on creating user saldo")
+
 	Error12DigitsAndOnlyNumber     = errors.New("invalid input: must be exactly 12 digits and contain only numbers")
 	NumberWithoutThousandSeparator = errors.New("invalid input: must contain only numbers without thousand separators (e.g., 1000, 25000)")
 	MustValidNumericValue          = errors.New("invalid input: must be a valid numeric value")
