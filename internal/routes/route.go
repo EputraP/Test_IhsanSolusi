@@ -6,8 +6,9 @@ import (
 )
 
 type Handlers struct {
-	TestHandler *handler.TestHandler
-	UserHandler *handler.UserHandler
+	TestHandler      *handler.TestHandler
+	UserHandler      *handler.UserHandler
+	UserSaldoHandler *handler.UserSaldoHandler
 }
 
 func Build(srv *fiber.App, h Handlers) {

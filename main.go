@@ -52,12 +52,16 @@ func prepare() (handlers routes.Handlers) {
 
 	testRepo := repository.NewTestRepository(db)
 	userRepo := repository.NewUserRepository(db)
+	userSaldoRepo := repository.NewUserSaldoRepository(db)
 
 	testService := service.NewTestService(service.TestServiceConfig{
 		TestRepo: testRepo,
 	})
 	userService := service.NewUserService(service.UserServiceConfig{
 		UserRepo: userRepo,
+	})
+	userSaldoService := service.NewUserSaldoService(service.UserSaldoServiceConfig{
+		UserSaldoRepo: userSaldoRepo,
 	})
 
 	testHandler := handler.NewTestHandler(handler.TestHandlerConfig{
@@ -66,10 +70,14 @@ func prepare() (handlers routes.Handlers) {
 	userHandler := handler.NewUserHandler(handler.UserHandlerConfig{
 		UserService: userService,
 	})
+	userSaldoHandler := handler.NewUserSaldoHandler(handler.UserSaldoHandlerConfig{
+		UserSaldoService: userSaldoService,
+	})
 
 	handlers = routes.Handlers{
-		TestHandler: testHandler,
-		UserHandler: userHandler,
+		TestHandler:      testHandler,
+		UserHandler:      userHandler,
+		UserSaldoHandler: userSaldoHandler,
 	}
 	return
 }
