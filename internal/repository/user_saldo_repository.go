@@ -9,6 +9,7 @@ import (
 
 type UserSaldoRepository interface {
 	CreateUserSaldo(inputModel *model.UserSaldo) (*model.UserSaldo, error)
+	GetUserSaldoById(inputModel *model.UserSaldo) (*model.UserSaldo, error)
 }
 
 type userSaldoRepository struct {
@@ -28,6 +29,20 @@ func (r *userSaldoRepository) CreateUserSaldo(inputModel *model.UserSaldo) (*mod
 				RETURNING id;`
 
 	res := r.db.Raw(sqlScript, inputModel.NoRekening, inputModel.Saldo, time.Now()).Scan(&inputModel)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return inputModel, nil
+}
+
+func (r *userSaldoRepository) GetUserSaldoById(inputModel *model.UserSaldo) (*model.UserSaldo, error) {
+
+	sqlScript := `SELECT no_rekening, saldo 
+				FROM user_saldo 
+				WHERE no_rekening = ?`
+
+	res := r.db.Raw(sqlScript, inputModel.NoRekening).Scan(&inputModel)
 
 	if res.Error != nil {
 		return nil, res.Error
