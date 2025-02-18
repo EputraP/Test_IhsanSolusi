@@ -63,5 +63,5 @@ func (h UserSaldoHandler) GetSaldoByNoRekHandler(c *fiber.Ctx) {
 		response.Error(c, 400, err.Error())
 		return
 	}
-	response.JSON(c, 200, "Creating User Succes", resp)
+	response.JSON(c, 200, "Getting User Saldo Succes", resp)
 }
