@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	CreateUser(inputModel *model.User) (*model.User, error)
 	CheckUserByNoHPOrNIK(inputModel *model.User) (*model.User, error)
+	CheckUserByNoRek(inputModel *model.User) (*model.User, error)
 }
 
 type userRepository struct {
@@ -48,6 +49,25 @@ func (r *userRepository) CheckUserByNoHPOrNIK(inputModel *model.User) (*model.Us
 					AND deleted_at IS NULL`
 
 	res := r.db.Raw(sqlScript, inputModel.NIK, inputModel.NoHP).Scan(&output)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return output, nil
+}
+func (r *userRepository) CheckUserByNoRek(inputModel *model.User) (*model.User, error) {
+
+	var output *model.User
+
+	sqlScript := `SELECT 
+					no_rekening
+				FROM users 
+				WHERE 
+					no_rekening= ?
+					AND deleted_at IS NULL`
+
+	res := r.db.Raw(sqlScript, inputModel.NoRekening).Scan(&output)
 
 	if res.Error != nil {
 		return nil, res.Error
