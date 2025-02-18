@@ -17,16 +17,19 @@ type UserService interface {
 }
 
 type userService struct {
-	userRepo repository.UserRepository
+	userRepo      repository.UserRepository
+	userSaldoRepo repository.UserSaldoRepository
 }
 
 type UserServiceConfig struct {
-	UserRepo repository.UserRepository
+	UserRepo      repository.UserRepository
+	UserSaldoRepo repository.UserSaldoRepository
 }
 
 func NewUserService(config UserServiceConfig) UserService {
 	return &userService{
-		userRepo: config.UserRepo,
+		userRepo:      config.UserRepo,
+		userSaldoRepo: config.UserSaldoRepo,
 	}
 }
 func (s *userService) CreateUser(input *dto.CreateUserBody) (*dto.CreateUserResponse, error) {
@@ -50,6 +53,10 @@ func (s *userService) CreateUser(input *dto.CreateUserBody) (*dto.CreateUserResp
 	user, err := s.userRepo.CreateUser(&model.User{NoRekening: noRekening, Nama: strings.ToLower(input.Nama), NIK: input.NIK, NoHP: input.NoHP})
 	if err != nil {
 		return nil, errs.ErrorCreatingUser
+	}
+	_, err = s.userSaldoRepo.CreateUserSaldo(&model.UserSaldo{NoRekening: user.NoRekening, Saldo: "0"})
+	if err != nil {
+		return nil, errs.ErrorCreatingUserSaldo
 	}
 
 	return &dto.CreateUserResponse{
