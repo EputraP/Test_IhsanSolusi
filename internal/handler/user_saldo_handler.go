@@ -48,3 +48,20 @@ func (h UserSaldoHandler) TabungHandler(c *fiber.Ctx) {
 	// }
 	response.JSON(c, 200, "Creating User Succes", "")
 }
+
+func (h UserSaldoHandler) GetSaldoByNoRekHandler(c *fiber.Ctx) {
+
+	noRek := c.Params("no_rekening")
+
+	if noRekErr := validator.Validate12DigitNumber(noRek); noRekErr != nil {
+		response.Error(c, 400, noRekErr.Error())
+		return
+	}
+
+	resp, err := h.userSaldoService.GetUserSaldoByNoRek(&noRek)
+	if err != nil {
+		response.Error(c, 400, err.Error())
+		return
+	}
+	response.JSON(c, 200, "Creating User Succes", resp)
+}
