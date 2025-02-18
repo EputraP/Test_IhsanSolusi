@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/EputraP/Test_IhsanSolusi/internal/constant"
 	"github.com/EputraP/Test_IhsanSolusi/internal/handler"
 	"github.com/EputraP/Test_IhsanSolusi/internal/repository"
 	"github.com/EputraP/Test_IhsanSolusi/internal/routes"
@@ -14,25 +13,39 @@ import (
 	"github.com/EputraP/Test_IhsanSolusi/internal/util/logger"
 	"github.com/gofiber/fiber"
 	"github.com/lpernett/godotenv"
+	"github.com/spf13/cobra"
 )
 
-func main() {
+var port string
+var host string
 
-	// Initialize the global logger
+func main() {
+	var rootCmd = &cobra.Command{
+		Use:   "server",
+		Short: "Start the API server",
+		Run:   startServer,
+	}
+
+	rootCmd.Flags().StringVarP(&host, "host", "H", "localhost", "Server host")
+	rootCmd.Flags().StringVarP(&port, "port", "P", "8080", "Server port")
+
+	if err := rootCmd.Execute(); err != nil {
+		logger.Error("error cobra", "error", err)
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+}
+
+func startServer(cmd *cobra.Command, args []string) {
 	if err := logger.Init("app.log"); err != nil {
 		fmt.Println("Failed to initialize logger:", err)
 		return
 	}
 
-	env := os.Getenv(constant.EnvKeyEnv)
-
-	if env != "prod" {
-		err := godotenv.Load()
-
-		if err != nil {
-			logger.Error("error loading env", "error", err)
-			log.Fatalln("error loading env", err)
-		}
+	err := godotenv.Load()
+	if err != nil {
+		logger.Error("error loading env", "error", err)
+		log.Fatalln("error loading env", err)
 	}
 
 	handlers := prepare()
@@ -41,21 +54,16 @@ func main() {
 
 	routes.Build(srv, handlers)
 
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "8080"
+	address := fmt.Sprintf("%s:%s", host, port)
+	if err := srv.Listen(address); err != nil {
+		logger.Error("Error running fiber server: ", "error", err)
+		log.Fatalln("Error running fiber server: ", err)
 	}
 
-	if err := srv.Listen(fmt.Sprintf(":%s", port)); err != nil {
-		logger.Error("Error running gin server: ", "error", err)
-		log.Fatalln("Error running gin server: ", err)
-	}
-	logger.Info("Server running", "port", port)
+	logger.Info("Server running", "host", host, "port", port)
 }
 
 func prepare() (handlers routes.Handlers) {
-
 	db := dbstore.Get()
 
 	userRepo := repository.NewUserRepository(db)
