@@ -11,7 +11,7 @@ import (
 
 type UserSaldoService interface {
 	GetUserSaldoByNoRek(noRek *string) (*dto.CurrentBalanceResponse, error)
-	TabungTarikSaldo(input *dto.TransactionBody) (*dto.CurrentBalanceResponse, error)
+	TabungTarikSaldo(mode string, input *dto.TransactionBody) (*dto.CurrentBalanceResponse, error)
 }
 
 type userSaldoService struct {
@@ -48,7 +48,7 @@ func (s *userSaldoService) GetUserSaldoByNoRek(noRek *string) (*dto.CurrentBalan
 	}, err
 }
 
-func (s *userSaldoService) TabungTarikSaldo(input *dto.TransactionBody) (*dto.CurrentBalanceResponse, error) {
+func (s *userSaldoService) TabungTarikSaldo(mode string, input *dto.TransactionBody) (*dto.CurrentBalanceResponse, error) {
 
 	checkNoRek, err := s.userRepo.CheckUserByNoRek(&model.User{NoRekening: input.NoRekening})
 	if err != nil || checkNoRek == nil {
@@ -69,7 +69,14 @@ func (s *userSaldoService) TabungTarikSaldo(input *dto.TransactionBody) (*dto.Cu
 		return nil, errs.ErrorStringIntConvertion
 	}
 
+	if mode == "tarik" {
+		topUpSaldo = -topUpSaldo
+	}
+
 	newSaldo := topUpSaldo + currentSaldo
+	if newSaldo < 0 {
+		return nil, errs.InsufficientBalance
+	}
 
 	updateSaldo, err := s.userSaldoRepo.UpdateUserSaldo(&model.UserSaldo{NoRekening: input.NoRekening, Saldo: strconv.Itoa(newSaldo)})
 

@@ -41,7 +41,33 @@ func (h UserSaldoHandler) TabungHandler(c *fiber.Ctx) {
 		return
 	}
 
-	resp, err := h.userSaldoService.TabungTarikSaldo(&dto.TransactionBody{NoRekening: transactionBody.NoRekening, Nominal: transactionBody.Nominal})
+	resp, err := h.userSaldoService.TabungTarikSaldo("tabung", &dto.TransactionBody{NoRekening: transactionBody.NoRekening, Nominal: transactionBody.Nominal})
+	if err != nil {
+		response.Error(c, 400, err.Error())
+		return
+	}
+	response.JSON(c, 200, "Tabung Succes", resp)
+}
+
+func (h UserSaldoHandler) TarikHandler(c *fiber.Ctx) {
+
+	var transactionBody *dto.TransactionBody
+
+	if err := c.BodyParser(&transactionBody); err != nil {
+		response.Error(c, 400, errs.InvalidRequestBody.Error())
+		return
+	}
+
+	if noRekErr := validator.Validate12DigitNumber(transactionBody.NoRekening); noRekErr != nil {
+		response.Error(c, 400, noRekErr.Error())
+		return
+	}
+	if nominalErr := validator.ValidateRupiahNominal(transactionBody.Nominal); nominalErr != nil {
+		response.Error(c, 400, nominalErr.Error())
+		return
+	}
+
+	resp, err := h.userSaldoService.TabungTarikSaldo("tarik", &dto.TransactionBody{NoRekening: transactionBody.NoRekening, Nominal: transactionBody.Nominal})
 	if err != nil {
 		response.Error(c, 400, err.Error())
 		return
