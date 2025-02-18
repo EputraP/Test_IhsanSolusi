@@ -74,13 +74,13 @@ func (s *userSaldoService) TabungTarikSaldo(mode string, input *dto.TransactionB
 	currentSaldo, err := strconv.Atoi(userSaldo.Saldo)
 	if err != nil {
 		logger.Error("Error converting saldo to integer", "error", err)
-		return nil, errs.ErrorStringIntConvertion
+		return nil, errs.ErrorStringIntConversion
 	}
 
 	topUpSaldo, err := strconv.Atoi(input.Nominal)
 	if err != nil {
 		logger.Error("Error converting nominal to integer", "error", err)
-		return nil, errs.ErrorStringIntConvertion
+		return nil, errs.ErrorStringIntConversion
 	}
 
 	if mode == "tarik" {
