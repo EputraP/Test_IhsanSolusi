@@ -15,4 +15,5 @@ func Build(srv *fiber.App, h Handlers) {
 
 	srv.Post("/daftar", h.UserHandler.UserHandler)
 	srv.Post("/tabung", h.UserSaldoHandler.TabungHandler)
+	srv.Get("/saldo/:no_rekening", h.UserSaldoHandler.GetSaldoByNoRekHandler)
 }
