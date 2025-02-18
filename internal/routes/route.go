@@ -6,7 +6,6 @@ import (
 )
 
 type Handlers struct {
-	TestHandler      *handler.TestHandler
 	UserHandler      *handler.UserHandler
 	UserSaldoHandler *handler.UserSaldoHandler
 }
