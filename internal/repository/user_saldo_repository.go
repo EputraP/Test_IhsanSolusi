@@ -9,6 +9,8 @@ import (
 
 type UserSaldoRepository interface {
 	CreateUserSaldo(inputModel *model.UserSaldo) (*model.UserSaldo, error)
+	GetUserSaldoById(inputModel *model.UserSaldo) (*model.UserSaldo, error)
+	UpdateUserSaldo(inputModel *model.UserSaldo) (*model.UserSaldo, error)
 }
 
 type userSaldoRepository struct {
@@ -35,16 +37,32 @@ func (r *userSaldoRepository) CreateUserSaldo(inputModel *model.UserSaldo) (*mod
 	return inputModel, nil
 }
 
-func (r *userSaldoRepository) UpdateUserSaldo(inputModel *model.User) (*model.User, error) {
+func (r *userSaldoRepository) GetUserSaldoById(inputModel *model.UserSaldo) (*model.UserSaldo, error) {
 
-	sqlScript := `INSERT INTO users (no_rekening , nama , nik, no_hp, created_at) 
-				VALUES (?,?,?,?,?) 
-				RETURNING no_rekening;`
+	sqlScript := `SELECT no_rekening, saldo 
+				FROM user_saldo 
+				WHERE no_rekening = ?`
 
-	res := r.db.Raw(sqlScript, inputModel.NoRekening, inputModel.Nama, inputModel.NIK, inputModel.NoHP, time.Now()).Scan(&inputModel)
+	res := r.db.Raw(sqlScript, inputModel.NoRekening).Scan(&inputModel)
 
 	if res.Error != nil {
 		return nil, res.Error
 	}
+	return inputModel, nil
+}
+
+func (r *userSaldoRepository) UpdateUserSaldo(inputModel *model.UserSaldo) (*model.UserSaldo, error) {
+
+	sqlScript := `UPDATE user_saldo
+				SET updated_at = ?, saldo = ?  
+				WHERE no_rekening = ? 
+				RETURNING *`
+
+	res := r.db.Raw(sqlScript, time.Now(), inputModel.Saldo, inputModel.NoRekening).Scan(&inputModel)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
 	return inputModel, nil
 }

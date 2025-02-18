@@ -12,7 +12,7 @@ func Validate12DigitNumber(input string) error {
 	re := regexp.MustCompile(`^\d{12}$`)
 
 	if !re.MatchString(input) {
-		return errs.Error12DigitsAndOnlyNumber
+		return errs.ErrorNoRek12DigitsAndOnlyNumber
 	}
 
 	return nil
@@ -23,12 +23,12 @@ func ValidateRupiahNominal(input string) error {
 	re := regexp.MustCompile(`^\d+$`)
 
 	if !re.MatchString(input) {
-		return errs.NumberWithoutThousandSeparator
+		return errs.ErrorNominalNumberWithoutThousandSeparator
 	}
 
 	// Convert to integer to ensure it's a valid number
 	if _, err := strconv.Atoi(input); err != nil {
-		return errs.MustValidNumericValue
+		return errs.ErrorNominalMustValidNumericValue
 	}
 
 	return nil

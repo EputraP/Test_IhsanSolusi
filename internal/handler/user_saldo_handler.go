@@ -41,10 +41,27 @@ func (h UserSaldoHandler) TabungHandler(c *fiber.Ctx) {
 		return
 	}
 
-	// resp, err := h.userService.CreateUser(createUserBody)
-	// if err != nil {
-	// 	response.Error(c, 400, err.Error())
-	// 	return
-	// }
-	response.JSON(c, 200, "Creating User Succes", "")
+	resp, err := h.userSaldoService.TabungTarikSaldo(&dto.TransactionBody{NoRekening: transactionBody.NoRekening, Nominal: transactionBody.Nominal})
+	if err != nil {
+		response.Error(c, 400, err.Error())
+		return
+	}
+	response.JSON(c, 200, "Tabung Succes", resp)
+}
+
+func (h UserSaldoHandler) GetSaldoByNoRekHandler(c *fiber.Ctx) {
+
+	noRek := c.Params("no_rekening")
+
+	if noRekErr := validator.Validate12DigitNumber(noRek); noRekErr != nil {
+		response.Error(c, 400, noRekErr.Error())
+		return
+	}
+
+	resp, err := h.userSaldoService.GetUserSaldoByNoRek(&noRek)
+	if err != nil {
+		response.Error(c, 400, err.Error())
+		return
+	}
+	response.JSON(c, 200, "Getting User Saldo Succes", resp)
 }
