@@ -8,6 +8,7 @@ import (
 )
 
 type UserSaldoService interface {
+	GetUserSaldoByNoRek(noRek *string) (*dto.CurrentBalanceResponse, error)
 }
 
 type userSaldoService struct {
