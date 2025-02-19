@@ -98,12 +98,6 @@ func (h UserSaldoHandler) GetSaldoByNoRekHandler(c *fiber.Ctx) {
 
 	noRek := c.Params("no_rekening")
 
-	if noRekErr := validator.Validate12DigitNumber(noRek); noRekErr != nil {
-		logger.Warn("Invalid rekening number", "noRekening", noRek, "error", noRekErr.Error())
-		response.Error(c, 400, noRekErr.Error())
-		return
-	}
-
 	resp, err := h.userSaldoService.GetUserSaldoByNoRek(&noRek)
 	if err != nil {
 		logger.Error("Failed to get saldo by rekening in GetSaldoByNoRekHandler", "error", err)
