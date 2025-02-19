@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/EputraP/Test_IhsanSolusi/internal/handler"
+	"github.com/EputraP/Test_IhsanSolusi/internal/middleware"
 	"github.com/EputraP/Test_IhsanSolusi/internal/repository"
 	"github.com/EputraP/Test_IhsanSolusi/internal/routes"
 	"github.com/EputraP/Test_IhsanSolusi/internal/service"
@@ -48,11 +49,13 @@ func startServer(cmd *cobra.Command, args []string) {
 		log.Fatalln("error loading env", err)
 	}
 
-	handlers := prepare()
+	handlers, middlewares := prepare()
 
 	srv := fiber.New()
 
-	routes.Build(srv, handlers)
+	srv.Use(middleware.CORS())
+
+	routes.Build(srv, handlers, middlewares)
 
 	address := fmt.Sprintf("%s:%s", host, port)
 	if err := srv.Listen(address); err != nil {
@@ -63,7 +66,7 @@ func startServer(cmd *cobra.Command, args []string) {
 	logger.Info("Server running", "host", host, "port", port)
 }
 
-func prepare() (handlers routes.Handlers) {
+func prepare() (handlers routes.Handlers, middlewares routes.Middlewares) {
 	db := dbstore.Get()
 
 	userRepo := repository.NewUserRepository(db)
@@ -84,6 +87,10 @@ func prepare() (handlers routes.Handlers) {
 	userSaldoHandler := handler.NewUserSaldoHandler(handler.UserSaldoHandlerConfig{
 		UserSaldoService: userSaldoService,
 	})
+
+	middlewares = routes.Middlewares{
+		UserSaldoMiddleware: middleware.ValidateNoRekening(),
+	}
 
 	handlers = routes.Handlers{
 		UserHandler:      userHandler,

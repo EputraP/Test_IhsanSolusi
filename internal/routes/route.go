@@ -10,10 +10,14 @@ type Handlers struct {
 	UserSaldoHandler *handler.UserSaldoHandler
 }
 
-func Build(srv *fiber.App, h Handlers) {
+type Middlewares struct {
+	UserSaldoMiddleware fiber.Handler
+}
+
+func Build(srv *fiber.App, h Handlers, middleware Middlewares) {
 
 	srv.Post("/daftar", h.UserHandler.UserHandler)
 	srv.Post("/tabung", h.UserSaldoHandler.TabungHandler)
 	srv.Post("/tarik", h.UserSaldoHandler.TarikHandler)
-	srv.Get("/saldo/:no_rekening", h.UserSaldoHandler.GetSaldoByNoRekHandler)
+	srv.Get("/saldo/:no_rekening", middleware.UserSaldoMiddleware, h.UserSaldoHandler.GetSaldoByNoRekHandler)
 }
