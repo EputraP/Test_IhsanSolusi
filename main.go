@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/EputraP/Test_IhsanSolusi/internal/handler"
+	"github.com/EputraP/Test_IhsanSolusi/internal/middleware"
 	"github.com/EputraP/Test_IhsanSolusi/internal/repository"
 	"github.com/EputraP/Test_IhsanSolusi/internal/routes"
 	"github.com/EputraP/Test_IhsanSolusi/internal/service"
@@ -51,6 +52,8 @@ func startServer(cmd *cobra.Command, args []string) {
 	handlers := prepare()
 
 	srv := fiber.New()
+
+	srv.Use(middleware.CORS())
 
 	routes.Build(srv, handlers)
 
