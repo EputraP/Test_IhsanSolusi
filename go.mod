@@ -1,6 +1,6 @@
 module github.com/EputraP/Test_IhsanSolusi
 
-go 1.23.5
+go 1.21
 
 require (
 	github.com/go-playground/validator/v10 v10.25.0
