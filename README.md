@@ -2,12 +2,11 @@
 # 📌Basic Banking Transaction API
 
 ## 📖 Overview
-basic banking transaction to fullfill the PT Ihsan Solusi Informatika for backend engineer test
-
+A basic banking transaction API built to fulfill the **PT Ihsan Solusi Informatika** backend engineer test.  
 
 
 ## 🚀 Features
-- ✅ Create Account
+- ✅ Create an Account 
 - ✅ Top-Up Balance
 - ✅ Withdraw Balance
 - ✅ Balance Checking
@@ -20,8 +19,9 @@ This project is built using the following technologies:
 - **GORM**
 - **PostgreSQL**
 - **Cobra**
-## 📌 API Endpoints  
 
+
+## 📌 API Endpoints  
 | Method | Endpoint         | Description            |
 |--------|----------------|------------------------|
 | **POST**    | `/daftar`    | Create user account     |
@@ -29,8 +29,8 @@ This project is built using the following technologies:
 | **POST**   | `/tarik`   | Withdraw balance      |
 | **GET**    | `/saldo/:no_rekening` | Get user balance |
 
-## 📦 Installation
 
+## 📦 Installation
 1. Clone the repository:  
    ```sh
    git clone https://github.com/EputraP/Test_IhsanSolusi.git
@@ -69,6 +69,6 @@ This application supports command-line arguments for customizing the server sett
 | `-H`  | Set the server host  | `localhost`  |
 | `-P`  | Set the server port  | `8080`       |
 
-    
+
 ## 📜 License  
 This project is licensed under the **[MIT](https://choosealicense.com/licenses/mit/)**, which allows commercial and personal use, modification, and distribution.  
